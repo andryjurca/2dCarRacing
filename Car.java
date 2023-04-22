@@ -30,9 +30,11 @@ public class Car extends Object implements KeyListener {
     private Image scaledImage;
     private int scaledWidth;
     private int scaledHeight;
-    Rectangle rectangle = new Rectangle(100, 100, 500, 10);
-    Rectangle rectangle2 = new Rectangle(100, 300, 500, 10);
-    Rectangle[] rectList = {rectangle, rectangle2};
+    Rectangle rectangle = new Rectangle(0, 0, 800, 10);
+    Rectangle rectangle2 = new Rectangle(0, 800, 800, 10);
+    Rectangle rectangle3 = new Rectangle(0, 0, 10, 800);
+    Rectangle rectangle4 = new Rectangle(800, 0, 10, 800);
+    Rectangle[] rectList = {rectangle, rectangle2, rectangle3, rectangle4};
     Shape rotatedRect;
     Rectangle imageRect;
     Rectangle carRectangle;
@@ -41,11 +43,15 @@ public class Car extends Object implements KeyListener {
     Area area2;
 
     public Car(int x, int y, int angle) {
-        super(x, y, angle);
-        setBackground(Color.red);
+        this.x = x;
+        this.y = y;
+        this.angle = angle;
+        setBackground(Color.gray);
 //        Rectangle rect = new Rectangle(100, 100, 45);
 //        add(rect);
         //setSize(100, 100);
+        System.out.println(x);
+        System.out.println(y);
 
         try {
             carImage = ImageIO.read(new File("mustang.png"));
@@ -59,13 +65,14 @@ public class Car extends Object implements KeyListener {
         scaledHeight = (int) (scalingFactor * carImage.getHeight());
         scaledImage = carImage.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
 
-
     }
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         Graphics2D g2dRect = (Graphics2D) g.create();
+        System.out.println(x);
+        System.out.println(y);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.rotate(Math.toRadians(angle), x + width / 2, y + height / 2);
         g2d.setColor(Color.RED);
@@ -80,7 +87,7 @@ public class Car extends Object implements KeyListener {
         Rectangle2D bounds = rotatedRect.getBounds2D();
         area2 = new Area(rotatedRect);
 
-        // g2dRect.draw(rotatedRect);
+        g2dRect.draw(rotatedRect);
         for (Rectangle rectus : rectList) {
             g2dRect.draw(rectus);
             area1 = new Area(rectus);

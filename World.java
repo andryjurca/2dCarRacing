@@ -20,7 +20,7 @@ public class World extends JFrame {
 
 
         // Create and add some GameObjects
-        Car mustang = new Car(200, 300, 0);
+        Car mustang = new Car(300, 300, 20);
         // Rectangle rectangle = new Rectangle(300, 300, 0);
         //Rectangle rect = new Rectangle(200, 200, 10);
         addKeyListener(mustang);
