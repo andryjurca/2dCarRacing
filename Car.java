@@ -30,7 +30,9 @@ public class Car extends Object implements KeyListener {
     private Image scaledImage;
     private int scaledWidth;
     private int scaledHeight;
-    Rectangle rectangle = new Rectangle(100, 100, 50, 50);
+    Rectangle rectangle = new Rectangle(100, 100, 500, 10);
+    Rectangle rectangle2 = new Rectangle(100, 300, 500, 10);
+    Rectangle[] rectList = {rectangle, rectangle2};
     Shape rotatedRect;
     Rectangle imageRect;
     Rectangle carRectangle;
@@ -68,6 +70,7 @@ public class Car extends Object implements KeyListener {
         g2d.rotate(Math.toRadians(angle), x + width / 2, y + height / 2);
         g2d.setColor(Color.RED);
         g2d.drawImage(scaledImage, x-scaledWidth/3, y-scaledHeight/2, null);
+
         imageRect = new Rectangle(x-scaledWidth/3, y-scaledHeight/2, scaledWidth, scaledHeight);
         Rectangle2D rect = new Rectangle2D.Double(imageRect.getX(), imageRect.getY(),
                 imageRect.getWidth(), imageRect.getHeight());
@@ -75,22 +78,31 @@ public class Car extends Object implements KeyListener {
         transform.rotate(Math.toRadians(angle), x + width / 2, y + height / 2);
         rotatedRect = transform.createTransformedShape(rect);
         Rectangle2D bounds = rotatedRect.getBounds2D();
-        area1 = new Area(rectangle);
         area2 = new Area(rotatedRect);
-        //Area area1Copy = new Area(area1);
-        area1.intersect(area2);
-        if (!area1.isEmpty()) {
-            System.out.println("am detectat o coliziune");
+
+        // g2dRect.draw(rotatedRect);
+        for (Rectangle rectus : rectList) {
+            g2dRect.draw(rectus);
+            area1 = new Area(rectus);
+            area1.intersect(area2);
+            if (!area1.isEmpty()) {
+                colliding();
+            }
+        }
+
         }
 
 
+        //Area area1Copy = new Area(area1);
 
 
-        g2dRect.draw(rectangle);
-        g2dRect.draw(rotatedRect);
+
+
+
+
         //g2dRect.draw(carRectangle);
 
-    }
+
 
     @Override
     public Dimension getPreferredSize() {
@@ -132,6 +144,7 @@ public class Car extends Object implements KeyListener {
             turningLeft = false;
             turningSpeed = 0;
         }
+
     }
 
     public void moveCar() {
@@ -150,6 +163,15 @@ public class Car extends Object implements KeyListener {
         if (isMoving) {
             angle -= (turningSpeed);
         }
+    }
+
+    public void colliding() {
+        x -= Math.round(Math.cos(Math.toRadians(angle)) * speed/10);
+        y -= Math.round(Math.sin(Math.toRadians(angle)) * speed/10);
+        speed = 0;
+
+        repaint();
+
     }
 
     @Override
