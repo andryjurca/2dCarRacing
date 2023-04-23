@@ -32,14 +32,6 @@ public class World extends JFrame {
 
         // Set up timer to update and repaint the window every 0.1 seconds
         Timer timer = new Timer(1, e -> {
-
-//            if (!mustang.area1.isEmpty()) {
-//                System.out.println("ciomageala");
-//                mustang.x -= Math.round(Math.cos(Math.toRadians(mustang.angle)) * 100);
-//                mustang.y -= Math.round(Math.sin(Math.toRadians(mustang.angle)) * 100);
-//                mustang.speed = 0;
-//                repaint();
-//            }
             for (Object obj : gameObjects) {
                 obj.updating();
             }

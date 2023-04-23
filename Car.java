@@ -17,6 +17,7 @@ public class Car extends Object implements KeyListener {
     int width = 50;
     int height = 30;
     private boolean isMoving = false;
+    private boolean isMovingBackwards = false;
     private boolean turningRight = false;
     private boolean turningLeft = false;
     private boolean brake = false;
@@ -124,6 +125,10 @@ public class Car extends Object implements KeyListener {
                 brake = false;
                 isMoving = true;
                 break;
+            case KeyEvent.VK_DOWN:
+                brake = false;
+                isMovingBackwards = true;
+                break;
             case KeyEvent.VK_LEFT:
                 turningLeft = true;
                 break;
@@ -143,6 +148,10 @@ public class Car extends Object implements KeyListener {
             isMoving = false;
             speed = 0;
         }
+        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            isMovingBackwards = false;
+            speed = 0;
+        }
         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             turningRight = false;
             turningSpeed = 0;
@@ -160,8 +169,17 @@ public class Car extends Object implements KeyListener {
         repaint();
     }
 
+    public void moveBackwards() {
+        x += Math.round(Math.cos(Math.toRadians(angle)) * speed/100);
+        y += Math.round(Math.sin(Math.toRadians(angle)) * speed/100);
+        repaint();
+    }
+
     public void turnRight() {
         if (isMoving) {
+            angle += (turningSpeed);
+        }
+        if (isMovingBackwards) {
             angle += (turningSpeed);
         }
     }
@@ -170,11 +188,14 @@ public class Car extends Object implements KeyListener {
         if (isMoving) {
             angle -= (turningSpeed);
         }
+        if (isMovingBackwards) {
+            angle -= (turningSpeed);
+        }
     }
 
     public void colliding() {
-        x -= Math.round(Math.cos(Math.toRadians(angle)) * speed/10);
-        y -= Math.round(Math.sin(Math.toRadians(angle)) * speed/10);
+        x -= Math.round(Math.cos(Math.toRadians(angle)) * (speed/10));
+        y -= Math.round(Math.sin(Math.toRadians(angle)) * (speed/10));
         speed = 0;
 
         repaint();
@@ -188,6 +209,14 @@ public class Car extends Object implements KeyListener {
             if (speed <= maxSpeed) {
 
                 speed += acceleration;
+            }
+
+        }
+        if (isMovingBackwards) {
+            moveBackwards();
+            if (speed <= maxSpeed) {
+
+                speed -= acceleration;
             }
 
         }
