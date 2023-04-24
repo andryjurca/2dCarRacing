@@ -1,15 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
 public class World extends JFrame {
-    private List<Object> gameObjects;
+    private List<GamePanel> gameObjects;
 
     public World() {
         super();
-        gameObjects = new ArrayList<Object>();
+        gameObjects = new ArrayList<GamePanel>();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
         this.setBackground(Color.LIGHT_GRAY);
@@ -20,11 +19,11 @@ public class World extends JFrame {
 
 
         // Create and add some GameObjects
-        Car mustang = new Car(300, 300, 20);
+        GamePanel gamePanel = new GamePanel(300, 300, 20);
         // Rectangle rectangle = new Rectangle(300, 300, 0);
         //Rectangle rect = new Rectangle(200, 200, 10);
-        addKeyListener(mustang);
-        addGameObject(mustang);
+        addKeyListener(gamePanel);
+        addGameObject(gamePanel);
         // addGameObject(rectangle);
         //addGameObject(rect);
 
@@ -32,7 +31,7 @@ public class World extends JFrame {
 
         // Set up timer to update and repaint the window every 0.1 seconds
         Timer timer = new Timer(1, e -> {
-            for (Object obj : gameObjects) {
+            for (GamePanel obj : gameObjects) {
                 obj.updating();
             }
             this.repaint();
@@ -40,7 +39,7 @@ public class World extends JFrame {
         timer.start();
     }
 
-    public void addGameObject(Object obj) {
+    public void addGameObject(GamePanel obj) {
         gameObjects.add(obj);
         add(obj);
     }
