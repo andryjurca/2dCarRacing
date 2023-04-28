@@ -9,10 +9,16 @@ public class Engine {
     private int rpm;
     private int gear;
     private double speed;
+    boolean accelerated = false;
 
 
 
     public Engine() {
+        rpm = 0;
+        gear = 1;
+        speed = 0;
+    }
+    public void restart() {
         rpm = 0;
         gear = 1;
         speed = 0;
@@ -25,9 +31,7 @@ public class Engine {
             rpm = 0;
         }
         if (!goodRpm()) {
-            rpm = 0;
-            gear = 1;
-            speed = 0;
+            restart();
         }
         speed = ((double)rpm * gear / MAX_RPM * MAX_SPEED)/2;
 
@@ -48,6 +52,7 @@ public class Engine {
         speed = ((double)rpm * gear / MAX_RPM * MAX_SPEED)/2;
     }
     public void pressAccelerator() {
+        accelerated = true;
         rpm += 50 / gear;
 
         // calculate speed based on rpm and gear

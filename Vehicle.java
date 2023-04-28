@@ -33,15 +33,12 @@ public class Vehicle {
     Rectangle imageRect;
     Area area1;
     Area area2;
-    int control;
     Engine engine = new Engine();
-    double angle360;
 
-    public Vehicle(int x, int y, int angle, int control) {
+    public Vehicle(int x, int y, int angle) {
         this.x = x;
         this.y = y;
         this.angle = angle;
-        this.control = control;
 
         try {
             image = ImageIO.read(new File("mustang.png"));
@@ -60,7 +57,6 @@ public class Vehicle {
 
     public void keyPressed(KeyEvent e, JPanel panel) {
         int keyCode = e.getKeyCode();
-        if (control == 0) {
             switch (keyCode) {
                 case KeyEvent.VK_UP:
                     brake = false;
@@ -75,32 +71,13 @@ public class Vehicle {
                 case KeyEvent.VK_RIGHT:
                     turningRight = true;
                     break;
-            }
-        if (control == 1) {
-                switch (keyCode) {
-                    case KeyEvent.VK_W:
-                        brake = false;
-                        isMoving = true;
-                        break;
-                    case KeyEvent.VK_S:
-                        brake = false;
-                        isMovingBackwards = true;
-                        break;
-                    case KeyEvent.VK_A:
-                        turningLeft = true;
-                        break;
-                    case KeyEvent.VK_D:
-                        turningRight = true;
-                        break;
-                }
-        }
+
         }
 
         panel.repaint();
     }
 
     public void keyReleased(KeyEvent e, JPanel panel) {
-        if (control == 0) {
             if (e.getKeyCode() == KeyEvent.VK_UP) {
                 isMoving = false;
                 //speed = 0;
@@ -121,23 +98,6 @@ public class Vehicle {
             }
             if (e.getKeyCode() == KeyEvent.VK_J) {
                 engine.shiftDown();
-            }
-        }
-        if (control == 1) {
-            if (e.getKeyCode() == KeyEvent.VK_W) {
-                isMoving = false;
-            }
-            if (e.getKeyCode() == KeyEvent.VK_S) {
-                isMovingBackwards = false;
-            }
-            if (e.getKeyCode() == KeyEvent.VK_D) {
-                turningRight = false;
-                turningSpeed = 0;
-            }
-            if (e.getKeyCode() == KeyEvent.VK_A) {
-                turningLeft = false;
-                turningSpeed = 0;
-            }
         }
 
     }
@@ -172,45 +132,50 @@ public class Vehicle {
     }
 
     public void colliding(JPanel panel) {
+        engine.restart();
         x -= Math.round(Math.cos(Math.toRadians(angle)) * (engine.getSpeed()/10));
         y -= Math.round(Math.sin(Math.toRadians(angle)) * (engine.getSpeed()/10));
-        speed = 0;
+        engine.restart();
 
         panel.repaint();
 
     }
 
     public void updating(JPanel panel) {
-        engine.run();
-        moveCar(panel);
-        if (isMoving) {
-            engine.pressAccelerator();
-        }
-        if (brake) {
-            engine.brake();
-        }
-        if (isMovingBackwards) {
-            moveBackwards(panel);
-            if (speed <= maxSpeed) {
+            engine.run();
+            moveCar(panel);
+            if (isMoving) {
+                engine.pressAccelerator();
+            }
+            if (brake) {
+                engine.brake();
+            }
+            if (isMovingBackwards) {
+                moveBackwards(panel);
+                if (speed <= maxSpeed) {
 
-                speed -= acceleration;
+                    speed -= acceleration;
+                }
+
             }
 
+            if (turningRight) {
+                turnRight();
+                if (turningSpeed <= maxSteeringSpeed) {
+                    turningSpeed += steeringAcceleration;
+                }
+
+            }
+            if (turningLeft) {
+                turnLeft();
+                if (turningSpeed <= maxSteeringSpeed) {
+                    turningSpeed += steeringAcceleration;
+                }
+
         }
 
-        if (turningRight) {
-            turnRight();
-            if (turningSpeed <= maxSteeringSpeed) {
-                turningSpeed += steeringAcceleration;
-            }
 
-        }
-        if (turningLeft) {
-            turnLeft();
-            if (turningSpeed <= maxSteeringSpeed) {
-                turningSpeed += steeringAcceleration;
-            }
-        }
+
     }
 
 
