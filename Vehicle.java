@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class Vehicle {
     int angle = 0;
-    int x;
-    int y;
+    double x;
+    double y;
     int width = 50;
     int height = 30;
     boolean isMoving = false;
@@ -34,6 +34,8 @@ public class Vehicle {
     Area area1;
     Area area2;
     int control;
+    Engine engine = new Engine();
+    double angle360;
 
     public Vehicle(int x, int y, int angle, int control) {
         this.x = x;
@@ -65,8 +67,7 @@ public class Vehicle {
                     isMoving = true;
                     break;
                 case KeyEvent.VK_DOWN:
-                    brake = false;
-                    isMovingBackwards = true;
+                    brake = true;
                     break;
                 case KeyEvent.VK_LEFT:
                     turningLeft = true;
@@ -102,11 +103,10 @@ public class Vehicle {
         if (control == 0) {
             if (e.getKeyCode() == KeyEvent.VK_UP) {
                 isMoving = false;
-                speed = 0;
+                //speed = 0;
             }
             if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                isMovingBackwards = false;
-                speed = 0;
+                brake = false;
             }
             if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
                 turningRight = false;
@@ -116,15 +116,19 @@ public class Vehicle {
                 turningLeft = false;
                 turningSpeed = 0;
             }
+            if (e.getKeyCode() == KeyEvent.VK_L) {
+                engine.shiftUp();
+            }
+            if (e.getKeyCode() == KeyEvent.VK_J) {
+                engine.shiftDown();
+            }
         }
         if (control == 1) {
             if (e.getKeyCode() == KeyEvent.VK_W) {
                 isMoving = false;
-                speed = 0;
             }
             if (e.getKeyCode() == KeyEvent.VK_S) {
                 isMovingBackwards = false;
-                speed = 0;
             }
             if (e.getKeyCode() == KeyEvent.VK_D) {
                 turningRight = false;
@@ -139,38 +143,37 @@ public class Vehicle {
     }
 
     public void moveCar(JPanel panel) {
-        x += Math.round(Math.cos(Math.toRadians(angle)) * speed/100);
-        y += Math.round(Math.sin(Math.toRadians(angle)) * speed/100);
+        double dx = engine.getSpeed() * Math.cos(Math.toRadians(angle)); // Calculate the change in x based on the car's speed and heading
+        double dy = engine.getSpeed() * Math.sin(Math.toRadians(angle)); // Calculate the change in y based on the car's speed and heading
+        x += dx / 100;
+        y += dy / 100;
         panel.repaint();
     }
 
     public void moveBackwards(JPanel panel) {
-        x += Math.round(Math.cos(Math.toRadians(angle)) * speed/100);
-        y += Math.round(Math.sin(Math.toRadians(angle)) * speed/100);
+        double dx = engine.getSpeed() * Math.cos(Math.toRadians(angle)); // Calculate the change in x based on the car's speed and heading
+        double dy = engine.getSpeed() * Math.sin(Math.toRadians(angle)); // Calculate the change in y based on the car's speed and heading
+        x -= dx / 100;
+        y -= dy / 100;
         panel.repaint();
     }
 
     public void turnRight() {
-        if (isMoving) {
+        if (!(engine.getSpeed() <= 0))
             angle += (turningSpeed);
-        }
-        if (isMovingBackwards) {
-            angle += (turningSpeed);
-        }
     }
 
     public void turnLeft() {
-        if (isMoving) {
+        if (!(engine.getSpeed() <= 0))
             angle -= (turningSpeed);
-        }
-        if (isMovingBackwards) {
-            angle -= (turningSpeed);
-        }
+    }
+    public void brake() {
+        engine.brake();
     }
 
     public void colliding(JPanel panel) {
-        x -= Math.round(Math.cos(Math.toRadians(angle)) * (speed/10));
-        y -= Math.round(Math.sin(Math.toRadians(angle)) * (speed/10));
+        x -= Math.round(Math.cos(Math.toRadians(angle)) * (engine.getSpeed()/10));
+        y -= Math.round(Math.sin(Math.toRadians(angle)) * (engine.getSpeed()/10));
         speed = 0;
 
         panel.repaint();
@@ -178,13 +181,13 @@ public class Vehicle {
     }
 
     public void updating(JPanel panel) {
+        engine.run();
+        moveCar(panel);
         if (isMoving) {
-            moveCar(panel);
-            if (speed <= maxSpeed) {
-
-                speed += acceleration;
-            }
-
+            engine.pressAccelerator();
+        }
+        if (brake) {
+            engine.brake();
         }
         if (isMovingBackwards) {
             moveBackwards(panel);

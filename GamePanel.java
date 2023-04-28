@@ -13,7 +13,7 @@ public class GamePanel extends JPanel implements KeyListener {
     Rectangle rectangle3 = new Rectangle(0, 0, 10, 800);
     Rectangle rectangle4 = new Rectangle(800, 0, 10, 800);
     Rectangle rectangle5 = new Rectangle(400, 400, 100, 100);
-    Rectangle[] rectList = {rectangle, rectangle2, rectangle3, rectangle4};
+    Rectangle[] rectList = {rectangle, rectangle2, rectangle3, rectangle4, rectangle5};
     Graphics2D g2d;
     Vehicle car = new Vehicle(400, 200, 45, 0);
     Vehicle car2 = new Vehicle(300, 300, 10, 1);
@@ -33,17 +33,17 @@ public class GamePanel extends JPanel implements KeyListener {
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.rotate(Math.toRadians(car.angle), car.x + car.width / 2, car.y + car.height / 2);
         g2d.setColor(Color.RED);
-        g2d.drawImage(car.scaledImage, car.x-car.scaledWidth/3, car.y-car.scaledHeight/2, null);
+        g2d.drawImage(car.scaledImage, (int) (car.x-car.scaledWidth/3), (int) (car.y-car.scaledHeight/2), null);
 
         // adaugat
 
         g2dSecondcar.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2dSecondcar.rotate(Math.toRadians(car2.angle), car2.x + car2.width / 2, car2.y + car2.height / 2);
         g2dSecondcar.setColor(Color.RED);
-        g2dSecondcar.drawImage(car2.scaledImage, car2.x-car2.scaledWidth/3, car2.y-car2.scaledHeight/2, null);
+        g2dSecondcar.drawImage(car2.scaledImage, (int) (car2.x-car2.scaledWidth/3), (int) (car2.y-car2.scaledHeight/2), null);
 
 
-        car.imageRect = new Rectangle(car.x-car.scaledWidth/3, car.y-car.scaledHeight/2, car.scaledWidth, car.scaledHeight);
+        car.imageRect = new Rectangle((int) (car.x-car.scaledWidth/3), (int) (car.y-car.scaledHeight/2), car.scaledWidth, car.scaledHeight);
         Rectangle2D rect = new Rectangle2D.Double(car.imageRect.getX(), car.imageRect.getY(),
                 car.imageRect.getWidth(), car.imageRect.getHeight());
         AffineTransform transform = new AffineTransform();
@@ -61,6 +61,9 @@ public class GamePanel extends JPanel implements KeyListener {
                 car.colliding(this);
             }
         }
+        g2dRect.drawString("Speed: " + (int) car.engine.getSpeed() / 4, 10, 10);
+        g2dRect.drawString("RPM: " + car.engine.getRPM(), 100, 10);
+        g2dRect.drawString("Gear: " + car.engine.getGear(), 190, 10);
 
         }
 
@@ -88,6 +91,6 @@ public class GamePanel extends JPanel implements KeyListener {
 
     public void updating() {
         car.updating(this);
-        car2.updating(this);
+        //car2.updating(this);
     }
 }
