@@ -6,13 +6,19 @@ import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Area;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 
 public class GamePanel extends JPanel implements KeyListener {
     Rectangle rectangle = new Rectangle(0, 0, 800, 10);
     Rectangle rectangle2 = new Rectangle(0, 800, 800, 10);
     Rectangle rectangle3 = new Rectangle(0, 0, 10, 800);
     Rectangle rectangle4 = new Rectangle(800, 0, 10, 800);
-    Rectangle rectangle5 = new Rectangle(210, 130, 300, 550);
+    Rectangle rectangle5 = new Rectangle(210, 130, 300, 500);
     Rectangle finishRect = new Rectangle(10, 400, 200, 10);
     Area finishArea = new Area(finishRect);
     Rectangle[] rectList = {rectangle, rectangle2, rectangle3, rectangle4, rectangle5};
@@ -20,6 +26,8 @@ public class GamePanel extends JPanel implements KeyListener {
     Vehicle car = new Vehicle(100, 200, -90);
     BotVehicle car2 = new BotVehicle(30, 300, -90);
     long startTime;
+    Long elapsedTime;
+    int score;
 
     public GamePanel(int x, int y, int angle) {
         setBackground(Color.gray);
@@ -72,17 +80,83 @@ public class GamePanel extends JPanel implements KeyListener {
         g2dRect.draw(finishRect);
         car.area2.intersect(finishArea);
         if (!car.area2.isEmpty()) {
-            long endTime = System.currentTimeMillis(); // get the end time
-            long elapsedTime = endTime - startTime; // calculate the elapsed time
-            elapsedTime = elapsedTime  / 1000;
-            System.out.println(elapsedTime);
+            if (car.y <= 390 && elapsedTime == null) {
+                System.out.println("pe sus");
+                car.y -= 10;
+
+            }
+            if (car.y >= 400 && elapsedTime==null) {
+                System.out.println("de jos");
+                long endTime = System.currentTimeMillis(); // get the end time
+                elapsedTime = endTime - startTime; // calculate the elapsed time
+                //elapsedTime = elapsedTime  / 1000;
+                //System.out.println(elapsedTime);
+                if (elapsedTime < score) {
+                    System.out.println("mai bun");
+                    writeScore();
+                }
+                elapsedTime = null;
+
+            }
+
+/*            if (elapsedTime == null) {
+                long endTime = System.currentTimeMillis(); // get the end time
+                elapsedTime = endTime - startTime; // calculate the elapsed time
+                //elapsedTime = elapsedTime  / 1000;
+                //System.out.println(elapsedTime);
+                if (elapsedTime < score) {
+                    System.out.println("mai bun");
+                        writeScore();
+                }
+
+            }*/
+
         }
+
+
+
         Font font = new Font("Arial", Font.PLAIN, 30); // set the font and size
         g2dRect.setFont(font);
         g2dRect.drawString("Speed: " + (int) car.engine.getSpeed() / 4, 10, 100);
         g2dRect.drawString("RPM: " + car.engine.getRPM(), 200, 100);
         g2dRect.drawString("Gear: " + car.engine.getGear(), 400, 100);
+        g2dRect.drawString("Score: " + readScore(), 600, 100);
 
+        }
+
+        public int readScore() {
+            try {
+                File file = new File("score.txt");
+                FileReader fileReader = new FileReader(file);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    score = Integer.parseInt(line);
+                }
+
+
+                bufferedReader.close();
+                fileReader.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return score;
+        }
+        public void writeScore() {
+            try {
+                FileWriter fileWriter = new FileWriter("score.txt", false);
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+                bufferedWriter.write(Long.toString(elapsedTime));
+                score = Math.toIntExact(elapsedTime);
+
+                bufferedWriter.close();
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 

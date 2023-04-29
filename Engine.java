@@ -31,7 +31,7 @@ public class Engine {
         if (rpm >= 3) {
             rpm -= 3;
         }
-        if (rpm == 1) {
+        if (rpm <= 3) {
             rpm = 0;
         }
         if (!goodRpm()) {

@@ -39,11 +39,8 @@ public class EngineSound implements Runnable {
     public static void playEngineSound(int rpm) {
         //double frequency = 100.0 * Math.exp((Math.log(2) / 3000.0) * (rpm - 6000));
         double frequency = rpmToFrequency(rpm);
-
-        System.out.println(frequency);
-        //double frequency = 10*Math.pow(2, rpm);
         long duration = 100;
-        float volume = 0.05f;
+        float volume = 0.01f;
         EngineSound player = new EngineSound(frequency, duration, volume);
         new Thread(player).start();
     }
