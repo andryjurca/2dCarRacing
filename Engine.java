@@ -13,6 +13,7 @@ public class Engine {
 
 
 
+
     public Engine() {
         rpm = 0;
         gear = 1;
@@ -23,9 +24,12 @@ public class Engine {
         gear = 1;
         speed = 0;
     }
+
+
     public void run() {
-        if (rpm >= 2) {
-            rpm -= 2;
+
+        if (rpm >= 3) {
+            rpm -= 3;
         }
         if (rpm == 1) {
             rpm = 0;
@@ -33,7 +37,13 @@ public class Engine {
         if (!goodRpm()) {
             restart();
         }
-        speed = ((double)rpm * gear / MAX_RPM * MAX_SPEED)/2;
+        EngineSound.playEngineSound(rpm);
+//        try {
+//            Thread.sleep(100);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
 
     }
     public boolean goodRpm() {
@@ -57,6 +67,7 @@ public class Engine {
 
         // calculate speed based on rpm and gear
         speed = ((double)rpm * gear / MAX_RPM * MAX_SPEED)/2;
+
     }
 
     public void shiftUp() {
