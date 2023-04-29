@@ -26,7 +26,6 @@ public class World extends JFrame {
         addGameObject(gamePanel);
         // addGameObject(rectangle);
         //addGameObject(rect);
-
         validate();
 
         // Set up timer to update and repaint the window every 0.1 seconds

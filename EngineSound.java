@@ -40,7 +40,7 @@ public class EngineSound implements Runnable {
         //double frequency = 100.0 * Math.exp((Math.log(2) / 3000.0) * (rpm - 6000));
         double frequency = rpmToFrequency(rpm);
         long duration = 100;
-        float volume = 0.01f;
+        float volume = 0.1f;
         EngineSound player = new EngineSound(frequency, duration, volume);
         new Thread(player).start();
     }

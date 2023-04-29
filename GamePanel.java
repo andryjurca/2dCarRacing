@@ -28,6 +28,8 @@ public class GamePanel extends JPanel implements KeyListener {
     long startTime;
     Long elapsedTime;
     int score;
+    boolean down = false;
+    boolean up = false;
 
     public GamePanel(int x, int y, int angle) {
         setBackground(Color.gray);
@@ -80,22 +82,27 @@ public class GamePanel extends JPanel implements KeyListener {
         g2dRect.draw(finishRect);
         car.area2.intersect(finishArea);
         if (!car.area2.isEmpty()) {
-            if (car.y <= 390 && elapsedTime == null) {
+            if (car.y <= 390) {
                 System.out.println("pe sus");
-                car.y -= 10;
+                up = true;
+                if (!down)
+                    car.y -= car.engine.getSpeed() / 10;
 
             }
-            if (car.y >= 400 && elapsedTime==null) {
+            if (car.y >= 400) {
                 System.out.println("de jos");
-                long endTime = System.currentTimeMillis(); // get the end time
-                elapsedTime = endTime - startTime; // calculate the elapsed time
-                //elapsedTime = elapsedTime  / 1000;
-                //System.out.println(elapsedTime);
-                if (elapsedTime < score) {
-                    System.out.println("mai bun");
-                    writeScore();
+                down = true;
+                if (!up) {
+                    long endTime = System.currentTimeMillis(); // get the end time
+                    elapsedTime = endTime - startTime; // calculate the elapsed time
+                    //elapsedTime = elapsedTime  / 1000;
+                    //System.out.println(elapsedTime);
+                    if (elapsedTime < score) {
+                        System.out.println("mai bun");
+                        writeScore();
+                    }
                 }
-                elapsedTime = null;
+
 
             }
 
@@ -111,6 +118,10 @@ public class GamePanel extends JPanel implements KeyListener {
 
             }*/
 
+        }
+        else {
+            up = false;
+            down = false;
         }
 
 
