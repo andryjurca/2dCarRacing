@@ -29,7 +29,7 @@ public class World extends JFrame {
         validate();
 
         // Set up timer to update and repaint the window every 0.1 seconds
-        Timer timer = new Timer(1, e -> {
+        Timer timer = new Timer(10, e -> {
             for (GamePanel obj : gameObjects) {
                 obj.updating();
             }

@@ -23,8 +23,8 @@ public class GamePanel extends JPanel implements KeyListener {
     Area finishArea = new Area(finishRect);
     Rectangle[] rectList = {rectangle, rectangle2, rectangle3, rectangle4, rectangle5};
     Graphics2D g2d;
-    Vehicle car = new Vehicle(100, 200, -90);
-    BotVehicle car2 = new BotVehicle(30, 300, -90);
+    Vehicle car = new Vehicle(100, 200, -90, 0);
+    Vehicle car2 = new Vehicle(30, 300, -90, 1);
     long startTime;
     Long elapsedTime;
     int score;
@@ -54,13 +54,10 @@ public class GamePanel extends JPanel implements KeyListener {
         g2d.setColor(Color.RED);
         g2d.drawImage(car.scaledImage, (int) (car.x-car.scaledWidth/3), (int) (car.y-car.scaledHeight/2), null);
 
-        // adaugat
-
         g2dSecondcar.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2dSecondcar.rotate(Math.toRadians(car2.angle), car2.x + car2.width / 2, car2.y + car2.height / 2);
         g2dSecondcar.setColor(Color.RED);
         g2dSecondcar.drawImage(car2.scaledImage, (int) (car2.x-car2.scaledWidth/3), (int) (car2.y-car2.scaledHeight/2), null);
-
 
         car.imageRect = new Rectangle((int) (car.x-car.scaledWidth/3), (int) (car.y-car.scaledHeight/2), car.scaledWidth, car.scaledHeight);
         Rectangle2D rect = new Rectangle2D.Double(car.imageRect.getX(), car.imageRect.getY(),
@@ -71,22 +68,35 @@ public class GamePanel extends JPanel implements KeyListener {
         Rectangle2D bounds = car.rotatedRect.getBounds2D();
         car.area2 = new Area(car.rotatedRect);
 
+        car2.imageRect = new Rectangle((int) (car2.x-car2.scaledWidth/3), (int) (car2.y-car2.scaledHeight/2), car2.scaledWidth, car2.scaledHeight);
+        Rectangle2D rect2 = new Rectangle2D.Double(car2.imageRect.getX(), car2.imageRect.getY(),
+                car2.imageRect.getWidth(), car2.imageRect.getHeight());
+        AffineTransform transform2 = new AffineTransform();
+        transform2.rotate(Math.toRadians(car2.angle), car2.x + car2.width / 2, car2.y + car2.height / 2);
+        car2.rotatedRect = transform2.createTransformedShape(rect2);
+        Rectangle2D bounds2 = car2.rotatedRect.getBounds2D();
+        car2.area2 = new Area(car2.rotatedRect);
+
         g2dRect.draw(car.rotatedRect);
         for (Rectangle rectus : rectList) {
             g2dRect.draw(rectus);
             car.area1 = new Area(rectus);
+            car2.area1 = new Area(rectus);
             car.area1.intersect(car.area2);
+            car2.area1.intersect(car2.area2);
             if (!car.area1.isEmpty()) {
                 car.colliding(this);
             }
+            if (!car2.area1.isEmpty()) {
+                car2.colliding(this);
+            }
         }
+
+
         if (lap < laps) {
             endTime = System.currentTimeMillis(); // get the end time
             elapsedTime = endTime - startTime; // calculate the elapsed time
         }
-
-
-
 
         g2dRect.draw(finishRect);
         car.area2.intersect(finishArea);
@@ -181,6 +191,7 @@ public class GamePanel extends JPanel implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         car.keyPressed(e, this);
+        car2.keyPressed(e, this);
     }
 
     @Override
@@ -189,6 +200,7 @@ public class GamePanel extends JPanel implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         car.keyReleased(e, this);
+        car2.keyReleased(e, this);
 
     }
 

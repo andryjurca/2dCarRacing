@@ -34,11 +34,13 @@ public class Vehicle {
     Area area1;
     Area area2;
     Engine engine = new Engine();
+    int control;
 
-    public Vehicle(int x, int y, int angle) {
+    public Vehicle(int x, int y, int angle, int control) {
         this.x = x;
         this.y = y;
         this.angle = angle;
+        this.control = control;
 
         try {
             image = ImageIO.read(new File("mustang.png"));
@@ -57,6 +59,7 @@ public class Vehicle {
 
     public void keyPressed(KeyEvent e, JPanel panel) {
         int keyCode = e.getKeyCode();
+        if (control == 0) {
             switch (keyCode) {
                 case KeyEvent.VK_UP:
                     brake = false;
@@ -71,6 +74,25 @@ public class Vehicle {
                 case KeyEvent.VK_RIGHT:
                     turningRight = true;
                     break;
+            }
+        }
+        if (control == 1) {
+                switch (keyCode) {
+                    case KeyEvent.VK_W:
+                        brake = false;
+                        isMoving = true;
+                        break;
+                    case KeyEvent.VK_S:
+                        brake = true;
+                        break;
+                    case KeyEvent.VK_A:
+                        turningLeft = true;
+                        break;
+                    case KeyEvent.VK_D:
+                        turningRight = true;
+                        break;
+                }
+
 
         }
 
@@ -78,27 +100,52 @@ public class Vehicle {
     }
 
     public void keyReleased(KeyEvent e, JPanel panel) {
-            if (e.getKeyCode() == KeyEvent.VK_UP) {
-                isMoving = false;
-                //speed = 0;
+            if (control == 0) {
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    isMoving = false;
+                    //speed = 0;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    brake = false;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    turningRight = false;
+                    turningSpeed = 0;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    turningLeft = false;
+                    turningSpeed = 0;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_L) {
+                    engine.shiftUp();
+                }
+                if (e.getKeyCode() == KeyEvent.VK_J) {
+                    engine.shiftDown();
+                }
             }
-            if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                brake = false;
+            if (control == 1) {
+                if (e.getKeyCode() == KeyEvent.VK_W) {
+                    isMoving = false;
+                    //speed = 0;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_S) {
+                    brake = false;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_D) {
+                    turningRight = false;
+                    turningSpeed = 0;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_A) {
+                    turningLeft = false;
+                    turningSpeed = 0;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_T) {
+                    engine.shiftUp();
+                }
+                if (e.getKeyCode() == KeyEvent.VK_R) {
+                    engine.shiftDown();
+                }
             }
-            if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                turningRight = false;
-                turningSpeed = 0;
-            }
-            if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                turningLeft = false;
-                turningSpeed = 0;
-            }
-            if (e.getKeyCode() == KeyEvent.VK_L) {
-                engine.shiftUp();
-            }
-            if (e.getKeyCode() == KeyEvent.VK_J) {
-                engine.shiftDown();
-        }
 
     }
 
