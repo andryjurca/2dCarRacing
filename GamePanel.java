@@ -30,6 +30,10 @@ public class GamePanel extends JPanel implements KeyListener {
     int score;
     boolean down = false;
     boolean up = false;
+    int lap = 0;
+    int laps = 2;
+    boolean lapped = false;
+    long endTime;
 
     public GamePanel(int x, int y, int angle) {
         setBackground(Color.gray);
@@ -76,6 +80,11 @@ public class GamePanel extends JPanel implements KeyListener {
                 car.colliding(this);
             }
         }
+        if (lap < laps) {
+            endTime = System.currentTimeMillis(); // get the end time
+            elapsedTime = endTime - startTime; // calculate the elapsed time
+        }
+
 
 
 
@@ -83,55 +92,48 @@ public class GamePanel extends JPanel implements KeyListener {
         car.area2.intersect(finishArea);
         if (!car.area2.isEmpty()) {
             if (car.y <= 390) {
-                System.out.println("pe sus");
                 up = true;
                 if (!down)
                     car.y -= car.engine.getSpeed() / 10;
+                    //car.engine.restart();
 
             }
             if (car.y >= 400) {
-                System.out.println("de jos");
                 down = true;
                 if (!up) {
-                    long endTime = System.currentTimeMillis(); // get the end time
-                    elapsedTime = endTime - startTime; // calculate the elapsed time
-                    //elapsedTime = elapsedTime  / 1000;
-                    //System.out.println(elapsedTime);
-                    if (elapsedTime < score) {
-                        System.out.println("mai bun");
-                        writeScore();
+
+                    if (lap == laps) {
+
+                        if (elapsedTime < score) {
+                            writeScore();
+                        }
+                    }
+
+                    if (!lapped) {
+                        lap += 1;
+                        lapped = true;
                     }
                 }
 
-
             }
-
-/*            if (elapsedTime == null) {
-                long endTime = System.currentTimeMillis(); // get the end time
-                elapsedTime = endTime - startTime; // calculate the elapsed time
-                //elapsedTime = elapsedTime  / 1000;
-                //System.out.println(elapsedTime);
-                if (elapsedTime < score) {
-                    System.out.println("mai bun");
-                        writeScore();
-                }
-
-            }*/
 
         }
         else {
             up = false;
             down = false;
+            lapped = false;
         }
 
 
 
-        Font font = new Font("Arial", Font.PLAIN, 30); // set the font and size
+        Font font = new Font("Arial", Font.PLAIN, 20); // set the font and size
         g2dRect.setFont(font);
         g2dRect.drawString("Speed: " + (int) car.engine.getSpeed() / 4, 10, 100);
-        g2dRect.drawString("RPM: " + car.engine.getRPM(), 200, 100);
-        g2dRect.drawString("Gear: " + car.engine.getGear(), 400, 100);
-        g2dRect.drawString("Score: " + readScore(), 600, 100);
+        g2dRect.drawString("RPM: " + car.engine.getRPM(), 130, 100);
+        g2dRect.drawString("Gear: " + car.engine.getGear(), 250, 100);
+        g2dRect.drawString("Highscore: " + readScore(), 350, 100);
+        g2dRect.drawString("Score: " + elapsedTime, 550, 100);
+        g2dRect.drawString("Lap: " + lap + " / " + laps, 700, 100);
 
         }
 

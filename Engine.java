@@ -1,11 +1,13 @@
 import java.util.Scanner;
 
 public class Engine {
+    private static final int MIN_RPM = 1000;
     private static final int MAX_RPM = 6000; // maximum RPM
     private static final int MAX_GEAR = 6; // maximum gear
     private static final int MIN_GEAR = 1; // minimum gear
     private static final double MAX_SPEED = 300; // maximum speed in km/h
-
+    private static final int ACCELERATOR = 50;
+    private static final int FRICTION = 3;
     private int rpm;
     private int gear;
     private double speed;
@@ -28,10 +30,10 @@ public class Engine {
 
     public void run() {
 
-        if (rpm >= 3) {
-            rpm -= 3;
+        if (rpm >= FRICTION) {
+            rpm -= FRICTION;
         }
-        if (rpm <= 3) {
+        if (rpm <= FRICTION) {
             rpm = 0;
         }
         if (!goodRpm()) {
@@ -47,10 +49,10 @@ public class Engine {
 
     }
     public boolean goodRpm() {
-        if (1000 <= rpm && rpm <= 6000) {
+        if (MIN_RPM <= rpm && rpm <= MAX_RPM) {
             return true;
         }
-        if (gear == 1 && rpm <= 6000) {
+        if (gear == 1 && rpm <= MAX_RPM) {
             return true;
         }
         return false;
@@ -63,7 +65,7 @@ public class Engine {
     }
     public void pressAccelerator() {
         accelerated = true;
-        rpm += 50 / gear;
+        rpm += ACCELERATOR / gear;
 
         // calculate speed based on rpm and gear
         speed = ((double)rpm * gear / MAX_RPM * MAX_SPEED)/2;
@@ -73,7 +75,7 @@ public class Engine {
     public void shiftUp() {
         if (gear < MAX_GEAR) {
             gear++;
-            rpm = (int)(rpm * 0.6); // decrease RPM by 20% when shifting up
+            rpm = (int)(rpm * 0.6);
         }
 
         // calculate speed based on rpm and gear
@@ -83,7 +85,7 @@ public class Engine {
     public void shiftDown() {
         if (gear > MIN_GEAR) {
             gear--;
-            rpm = (int)(rpm * 1.4); // increase RPM by 20% when shifting down
+            rpm = (int)(rpm * 1.4);
         }
 
         // calculate speed based on rpm and gear
