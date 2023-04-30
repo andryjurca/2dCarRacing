@@ -18,8 +18,8 @@ public class EngineSound implements Runnable {
 
     public static double rpmToFrequency(double rpm) {
         // Calculate the frequency using a logarithmic scaling
-        double minFrequency = 100.0;
-        double maxFrequency = 150.0;
+        double minFrequency = 20.0;
+        double maxFrequency = 70.0;
         double scalingFactor = Math.log(maxFrequency / minFrequency) / 7000.0;
         double frequency = 0.0;
         if (rpm > 0) {

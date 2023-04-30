@@ -146,13 +146,13 @@ public class AutomaticVehicle {
         panel.repaint();
     }
 
-    public void moveBackwards(JPanel panel) {
+    /*public void moveBackwards(JPanel panel) {
         double dx = speed * Math.cos(Math.toRadians(angle)); // Calculate the change in x based on the car's speed and heading
         double dy = speed * Math.sin(Math.toRadians(angle)); // Calculate the change in y based on the car's speed and heading
         x -= dx / 100;
         y -= dy / 100;
         panel.repaint();
-    }
+    }*/
 
     public void turnRight() {
         if (!(speed <= 0))
@@ -180,6 +180,9 @@ public class AutomaticVehicle {
     public void updating(JPanel panel) {
         if (!(speed <= decrease))
             speed -= decrease;
+        else {
+            speed = 0;
+        }
         moveCar(panel);
         if (isMoving) {
             if (speed <= maxSpeed)
@@ -189,14 +192,14 @@ public class AutomaticVehicle {
             brake();
         }
 
-        if (isMovingBackwards) {
+        /*if (isMovingBackwards) {
             moveBackwards(panel);
             if (speed <= maxSpeed) {
 
                 speed -= acceleration;
             }
 
-        }
+        }*/
 
         if (turningRight) {
             turnRight();
