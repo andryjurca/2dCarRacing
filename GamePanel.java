@@ -24,7 +24,7 @@ public class GamePanel extends JPanel implements KeyListener {
     Rectangle[] rectList = {rectangle, rectangle2, rectangle3, rectangle4, rectangle5};
     Graphics2D g2d;
     Vehicle car = new Vehicle(100, 200, -90, 0);
-    Vehicle car2 = new Vehicle(30, 300, -90, 1);
+    AutomaticVehicle car2 = new AutomaticVehicle(30, 300, -90, 1);
     long startTime;
     Long elapsedTime;
     int score;
@@ -78,6 +78,7 @@ public class GamePanel extends JPanel implements KeyListener {
         car2.area2 = new Area(car2.rotatedRect);
 
         g2dRect.draw(car.rotatedRect);
+        g2dRect.draw(car2.rotatedRect);
         for (Rectangle rectus : rectList) {
             g2dRect.draw(rectus);
             car.area1 = new Area(rectus);
@@ -145,42 +146,42 @@ public class GamePanel extends JPanel implements KeyListener {
         g2dRect.drawString("Score: " + elapsedTime, 550, 100);
         g2dRect.drawString("Lap: " + lap + " / " + laps, 700, 100);
 
-        }
+    }
 
-        public int readScore() {
-            try {
-                File file = new File("score.txt");
-                FileReader fileReader = new FileReader(file);
-                BufferedReader bufferedReader = new BufferedReader(fileReader);
+    public int readScore() {
+        try {
+            File file = new File("score.txt");
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    score = Integer.parseInt(line);
-                }
-
-
-                bufferedReader.close();
-                fileReader.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                score = Integer.parseInt(line);
             }
-            return score;
-        }
-        public void writeScore() {
-            try {
-                FileWriter fileWriter = new FileWriter("score.txt", false);
-                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
-                bufferedWriter.write(Long.toString(elapsedTime));
-                score = Math.toIntExact(elapsedTime);
 
-                bufferedWriter.close();
-                fileWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            bufferedReader.close();
+            fileReader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return score;
+    }
+    public void writeScore() {
+        try {
+            FileWriter fileWriter = new FileWriter("score.txt", false);
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+            bufferedWriter.write(Long.toString(elapsedTime));
+            score = Math.toIntExact(elapsedTime);
+
+            bufferedWriter.close();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @Override
