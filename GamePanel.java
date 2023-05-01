@@ -24,7 +24,7 @@ public class GamePanel extends JPanel implements KeyListener {
     Rectangle[] rectList = {rectangle, rectangle2, rectangle3, rectangle4, rectangle5};
     Graphics2D g2d;
     Vehicle car = new Vehicle(100, 200, -90, 0);
-    AutomaticVehicle car2 = new AutomaticVehicle(30, 300, -90, 1);
+    BotVehicle car2 = new BotVehicle(30, 300, -90);
     long startTime;
     Long elapsedTime;
     long elapsedTime2;

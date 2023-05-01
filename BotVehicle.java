@@ -1,6 +1,8 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +18,11 @@ public class BotVehicle {
     Image scaledImage;
     int scaledWidth;
     int scaledHeight;
+    Shape rotatedRect;
+    Rectangle imageRect;
+    Area area1;
+    Area area2;
+    int speed = 4;
     public BotVehicle(int x, int y, int angle) {
         this.x = x;
         this.y = y;
@@ -34,23 +41,57 @@ public class BotVehicle {
         scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
     }
 
-    public void updating(JPanel panel) {
-        x += 2*Math.cos(Math.toRadians(angle));
-        y += 2*Math.sin(Math.toRadians(angle));
+    public void keyPressed(KeyEvent e, JPanel panel) {;}
+
+    public void keyReleased(KeyEvent e, JPanel panel) {;}
+
+    public void colliding(JPanel panel) {
+        int speed = 0;
+        x -= Math.round(Math.cos(Math.toRadians(angle)) * (speed/10));
+        y -= Math.round(Math.sin(Math.toRadians(angle)) * (speed/10));
+        speed = 0;
+
         panel.repaint();
 
+    }
 
-        if (y <= 100 && x <= 88) {
-            angle+=2;
+    private int normalizeAngle(int angle) {
+        int normalizedAngle = angle % 360;
+
+        if (normalizedAngle < 0) {
+            normalizedAngle += 360;
         }
-        if (x >= 650 && y <= 100) {
-            angle+=2;
+        if (normalizedAngle == 360) {
+            normalizedAngle = 0;
         }
-        if (y >= 650 && x >= 650) {
-            angle+=2;
+
+        return normalizedAngle;
+    }
+
+    public void updating(JPanel panel) {
+        x += speed*Math.cos(Math.toRadians(angle));
+        y += speed*Math.sin(Math.toRadians(angle));
+        panel.repaint();
+        int normalizedAngle = normalizeAngle(angle);
+        System.out.println((int) x);
+
+        if ((int) y <= 100 && normalizedAngle == 270) {
+            angle += 90;
+            System.out.println("primul");
         }
-        if (y >= 650 && x <= 88) {
-            angle += 2;
+
+        if ((int) x >= 600 && normalizedAngle == 0) {
+            angle += 90;
+            System.out.println("doi");
+
+        }
+        if ((int) y >= 650 && normalizedAngle == 90) {
+            angle += 90;
+            System.out.println("trei");
+        }
+        if ((int) x <= 150 && normalizedAngle == 180) {
+            angle += 90;
+            System.out.println("patru");
         }
     }
 }
