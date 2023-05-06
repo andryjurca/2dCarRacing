@@ -64,6 +64,10 @@ public class EngineSound implements Runnable {
             SourceDataLine line = AudioSystem.getSourceDataLine(format);
             line.open(format);
             line.start();
+
+            FloatControl gainControl = (FloatControl) line.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(-40.0f);
+
             byte[] buffer = createBuffer(frequency, durationMillis, volume);
             line.write(buffer, 0, buffer.length);
             line.drain();

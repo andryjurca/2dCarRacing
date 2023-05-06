@@ -7,6 +7,8 @@ public class Engine {
     private static final int MIN_GEAR = 1; // minimum gear
     private static final double MAX_SPEED = 300; // maximum speed in km/h
     private static final int ACCELERATOR = 50;
+    private static final int TORQUE = 300;
+    private static final int HP = 200;
     private static final int FRICTION = 3;
     private int rpm;
     private int gear;

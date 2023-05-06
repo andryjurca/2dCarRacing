@@ -23,26 +23,20 @@ public class GamePanel extends JPanel implements KeyListener {
     Area finishArea = new Area(finishRect);
     Rectangle[] rectList = {rectangle, rectangle2, rectangle3, rectangle4, rectangle5};
     Graphics2D g2d;
-    Vehicle car = new Vehicle(100, 200, -90, 0);
-    BotVehicle car2 = new BotVehicle(30, 300, -90);
+    ManualVehicle car = new ManualVehicle(100, 200, -90, "mustang.png", 1);
+    BotVehicle car2 = new BotVehicle(30, 300, -90, "mustang.png");
     long startTime;
     Long elapsedTime;
     long elapsedTime2;
     int score;
-    boolean down = false;
-    boolean up = false;
-    boolean up2 = false;
-    boolean down2 = false;
-    int lap = 0;
-    int lap2 = 0;
+
     int laps = 2;
-    boolean lapped = false;
-    boolean lapped2 = false;
+
     long endTime;
 
     public GamePanel(int x, int y, int angle) {
         setBackground(Color.gray);
-        setPreferredSize(new Dimension(car.image.getWidth(), car.image.getHeight()));
+        //setPreferredSize(new Dimension(car.image.getWidth(), car.image.getHeight()));
         startTime = System.currentTimeMillis();
 
 
@@ -99,11 +93,11 @@ public class GamePanel extends JPanel implements KeyListener {
         }
 
 
-        if (lap < laps) {
+        if (car.lap < laps) {
             endTime = System.currentTimeMillis(); // get the end time
             elapsedTime = endTime - startTime; // calculate the elapsed time
         }
-        if (lap2 < laps) {
+        if (car2.lap < laps) {
             elapsedTime2 = System.currentTimeMillis()-startTime;
         }
 
@@ -111,26 +105,26 @@ public class GamePanel extends JPanel implements KeyListener {
         car.area2.intersect(finishArea);
         if (!car.area2.isEmpty()) {
             if (car.y <= 390) {
-                up = true;
-                if (!down)
-                    car.y -= car.engine.getSpeed() / 10;
+                car.up = true;
+                if (!car.down)
+                    car.y -= car.speed / 10;
                     //car.engine.restart();
 
             }
             if (car.y >= 400) {
-                down = true;
-                if (!up) {
+                car.down = true;
+                if (!car.up) {
 
-                    if (lap == laps) {
+                    if (car.lap == laps) {
 
                         if (elapsedTime < score) {
                             writeScore(elapsedTime);
                         }
                     }
 
-                    if (!lapped) {
-                        lap += 1;
-                        lapped = true;
+                    if (!car.lapped) {
+                        car.lap += 1;
+                        car.lapped = true;
                     }
                 }
 
@@ -138,34 +132,34 @@ public class GamePanel extends JPanel implements KeyListener {
 
         }
         else {
-            up = false;
-            down = false;
-            lapped = false;
+            car.up = false;
+            car.down = false;
+            car.lapped = false;
         }
 
         car2.area2.intersect(finishArea);
         if (!car2.area2.isEmpty()) {
             if (car2.y <= 390) {
-                up2 = true;
-                if (!down2)
-                    car2.y -= (double) car2.speed / 10;
+                car2.up = true;
+                if (!car2.down)
+                    car2.y -= car2.speed / 10;
                 //car.engine.restart();
 
             }
             if (car2.y >= 400) {
-                down2 = true;
-                if (!up2) {
+                car2.down = true;
+                if (!car2.up) {
 
-                    if (lap2 == laps) {
+                    if (car2.lap == laps) {
 
                         if (elapsedTime2 < score) {
                             writeScore(elapsedTime2);
                         }
                     }
 
-                    if (!lapped2) {
-                        lap2 += 1;
-                        lapped2 = true;
+                    if (!car2.lapped) {
+                        car2.lap += 1;
+                        car2.lapped = true;
                     }
                 }
 
@@ -173,9 +167,9 @@ public class GamePanel extends JPanel implements KeyListener {
 
         }
         else {
-            up2 = false;
-            down2 = false;
-            lapped2 = false;
+            car2.up = false;
+            car2.down = false;
+            car2.lapped = false;
         }
 
 
@@ -187,12 +181,16 @@ public class GamePanel extends JPanel implements KeyListener {
         g2dRect.drawString("Gear: " + car.engine.getGear(), 250, 100);
         g2dRect.drawString("Highscore: " + readScore(), 350, 100);
         g2dRect.drawString("Score: " + elapsedTime, 550, 100);
-        g2dRect.drawString("Lap: " + lap + " / " + laps, 700, 100);
+        g2dRect.drawString("Lap: " + car.lap + " / " + laps, 700, 100);
 
+//        g2dRect.drawString("Speed: " + (int) car2.speed / 4, 10, 700);
         g2dRect.drawString("Speed: " + (int) car2.speed / 4, 10, 700);
+//        g2dRect.drawString("RPM: " + car2.engine.getRPM(), 130, 700);
+//        g2dRect.drawString("Gear: " + car2.engine.getGear(), 250, 700);
+        // pana aici
         g2dRect.drawString("Highscore: " + readScore(), 350, 700);
         g2dRect.drawString("Score: " + elapsedTime2, 550, 700);
-        g2dRect.drawString("Lap: " + lap2 + " / " + laps, 700, 700);
+        g2dRect.drawString("Lap: " + car2.lap + " / " + laps, 700, 700);
 
     }
 

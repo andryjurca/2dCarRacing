@@ -17,17 +17,12 @@ public class World extends JFrame {
         //setLayout(null);
         //setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-
-        // Create and add some GameObjects
         GamePanel gamePanel = new GamePanel(300, 300, 20);
-        // Rectangle rectangle = new Rectangle(300, 300, 0);
-        //Rectangle rect = new Rectangle(200, 200, 10);
+
         addKeyListener(gamePanel);
         addGameObject(gamePanel);
-        // addGameObject(rectangle);
-        //addGameObject(rect);
-        validate();
 
+        validate();
         // Set up timer to update and repaint the window every 0.1 seconds
         Timer timer = new Timer(10, e -> {
             for (GamePanel obj : gameObjects) {

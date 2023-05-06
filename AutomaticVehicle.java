@@ -1,60 +1,23 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.geom.Area;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-public class AutomaticVehicle {
-    int angle = 0;
-    double x;
-    double y;
-    int width = 50;
-    int height = 30;
+public class AutomaticVehicle extends Vehicle {
     boolean isMoving = false;
     boolean isMovingBackwards = false;
     boolean turningRight = false;
     boolean turningLeft = false;
     boolean brake = false;
-    int speed = 0;
     int turningSpeed = 0;
     int maxSpeed = 500;
     int acceleration = 10;
     int maxSteeringSpeed = 1;
     int steeringAcceleration = 1;
-    BufferedImage image;
-    boolean imageLoaded;
-    Image scaledImage;
-    int scaledWidth;
-    int scaledHeight;
-    Shape rotatedRect;
-    Rectangle imageRect;
-    Area area1;
-    Area area2;
     int control;
     int decrease = 3;
 
-    public AutomaticVehicle(int x, int y, int angle, int control) {
-        this.x = x;
-        this.y = y;
-        this.angle = angle;
+    public AutomaticVehicle(int x, int y, int angle, String imageFileName, int control) {
+        super(x, y, angle, imageFileName);
         this.control = control;
-
-        try {
-            image = ImageIO.read(new File("mustang.png"));
-            imageLoaded = false;
-
-        } catch (IOException e) {
-            System.out.println("Error loading car image");
-            imageLoaded = false;
-        }
-
-        double scalingFactor = Math.min(100.0 / image.getWidth(), 100.0 / image.getHeight());
-        scaledWidth = (int) (scalingFactor * image.getWidth());
-        scaledHeight = (int) (scalingFactor * image.getHeight());
-        scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
     }
 
     public void keyPressed(KeyEvent e, JPanel panel) {
