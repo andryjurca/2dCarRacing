@@ -5,7 +5,7 @@ public class BotVehicle extends Vehicle {
     public BotVehicle(int x, int y, int angle, String imageFileName) {
         super(x, y, angle, imageFileName);
 
-        this.speed = 4.7;
+        this.speed = 5;
     }
 
     public void keyPressed(KeyEvent e, JPanel panel) {;}
@@ -30,7 +30,6 @@ public class BotVehicle extends Vehicle {
         y += speed*Math.sin(Math.toRadians(angle));
         panel.repaint();
         int normalizedAngle = normalizeAngle(angle);
-        System.out.println((int) x);
 
         if ((int) y <= 100 && normalizedAngle == 270) {
             angle += 90;

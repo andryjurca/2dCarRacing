@@ -30,9 +30,12 @@ public class GamePanel extends JPanel implements KeyListener {
     long elapsedTime2;
     int score;
 
-    int laps = 2;
+    int laps = 5;
 
     long endTime;
+    boolean car1won;
+    boolean finishedRace = false;
+
 
     public GamePanel(int x, int y, int angle) {
         setBackground(Color.gray);
@@ -100,18 +103,28 @@ public class GamePanel extends JPanel implements KeyListener {
         if (car2.lap < laps) {
             elapsedTime2 = System.currentTimeMillis()-startTime;
         }
+        if (car.lap == laps) {
+            finishedRace = true;
+            if (elapsedTime2>elapsedTime)
+                car1won = true;
+        }
+        if (car2.lap == laps) {
+            finishedRace = true;
+            if (elapsedTime>elapsedTime2)
+                car1won = false;
+        }
 
         g2dRect.draw(finishRect);
         car.area2.intersect(finishArea);
         if (!car.area2.isEmpty()) {
-            if (car.y <= 390) {
+            if (car.y <= finishRect.y-finishRect.height) {
                 car.up = true;
                 if (!car.down)
                     car.y -= car.speed / 10;
                     //car.engine.restart();
 
             }
-            if (car.y >= 400) {
+            if (car.y >= finishRect.y) {
                 car.down = true;
                 if (!car.up) {
 
@@ -191,6 +204,13 @@ public class GamePanel extends JPanel implements KeyListener {
         g2dRect.drawString("Highscore: " + readScore(), 350, 700);
         g2dRect.drawString("Score: " + elapsedTime2, 550, 700);
         g2dRect.drawString("Lap: " + car2.lap + " / " + laps, 700, 700);
+        if (finishedRace) {
+            if (car1won)
+                g2dRect.drawString("Car 1 Won!!!" , 300, 400);
+            if (!car1won)
+                g2dRect.drawString("Car 2 Won!!!" , 300, 400);
+        }
+
 
     }
 
