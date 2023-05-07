@@ -132,6 +132,7 @@ public class AutomaticVehicle extends Vehicle {
 
     public void colliding(JPanel panel) {
         speed = 0;
+        // isMoving = false;
         x -= Math.round(Math.cos(Math.toRadians(angle)) * (speed/10));
         y -= Math.round(Math.sin(Math.toRadians(angle)) * (speed/10));
         speed = 0;

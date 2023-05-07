@@ -14,17 +14,21 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 
 public class GamePanel extends JPanel implements KeyListener {
-    Rectangle rectangle = new Rectangle(0, 0, 800, 10);
-    Rectangle rectangle2 = new Rectangle(0, 800, 800, 10);
-    Rectangle rectangle3 = new Rectangle(0, 0, 10, 800);
-    Rectangle rectangle4 = new Rectangle(800, 0, 10, 800);
-    Rectangle rectangle5 = new Rectangle(210, 130, 300, 500);
+    Rectangle rectangle = new Rectangle(0, 0, 8000, 10);
+    Rectangle rectangle2 = new Rectangle(0, 830, 8000, 10);
+    Rectangle rectangle3 = new Rectangle(0, 0, 10, 830);
+    Rectangle rectangle4 = new Rectangle(1560, 0, 10, 800);
+    Rectangle rectangle5 = new Rectangle(210, 130, 200, 500);
+    Rectangle rectangle6 = new Rectangle(400, 430, 200, 200);
+    Rectangle rectangle7 = new Rectangle(500, 0, 300, 300);
+    Rectangle rectangle8 = new Rectangle(600, 430, 600, 200);
+    Rectangle rectangle9 = new Rectangle(1000, 300, 300, 200);
     Rectangle finishRect = new Rectangle(10, 400, 200, 10);
     Area finishArea = new Area(finishRect);
-    Rectangle[] rectList = {rectangle, rectangle2, rectangle3, rectangle4, rectangle5};
+    Rectangle[] rectList = {rectangle, rectangle2, rectangle3, rectangle4, rectangle5, rectangle6, rectangle7, rectangle8, rectangle9};
     Graphics2D g2d;
-    ManualVehicle car = new ManualVehicle(100, 200, -90, "mustang.png", 1);
-    BotVehicle car2 = new BotVehicle(30, 300, -90, "mustang.png");
+    ManualVehicle car = new ManualVehicle(100, 200, -90, "audi.png", 1);
+    AutomaticVehicle car2 = new AutomaticVehicle(90, 200, -90, "mustang.png", 0);
     long startTime;
     Long elapsedTime;
     long elapsedTime2;
@@ -38,7 +42,7 @@ public class GamePanel extends JPanel implements KeyListener {
 
 
     public GamePanel(int x, int y, int angle) {
-        setBackground(Color.gray);
+        setBackground(Color.lightGray);
         //setPreferredSize(new Dimension(car.image.getWidth(), car.image.getHeight()));
         startTime = System.currentTimeMillis();
 
@@ -79,10 +83,10 @@ public class GamePanel extends JPanel implements KeyListener {
         Rectangle2D bounds2 = car2.rotatedRect.getBounds2D();
         car2.area2 = new Area(car2.rotatedRect);
 
-        g2dRect.draw(car.rotatedRect);
-        g2dRect.draw(car2.rotatedRect);
+        //g2dRect.draw(car.rotatedRect);
+        //g2dRect.draw(car2.rotatedRect);
         for (Rectangle rectus : rectList) {
-            g2dRect.draw(rectus);
+            g2dRect.fill(rectus);
             car.area1 = new Area(rectus);
             car2.area1 = new Area(rectus);
             car.area1.intersect(car.area2);
@@ -192,23 +196,23 @@ public class GamePanel extends JPanel implements KeyListener {
         g2dRect.drawString("Speed: " + (int) car.engine.getSpeed() / 4, 10, 100);
         g2dRect.drawString("RPM: " + car.engine.getRPM(), 130, 100);
         g2dRect.drawString("Gear: " + car.engine.getGear(), 250, 100);
-        g2dRect.drawString("Highscore: " + readScore(), 350, 100);
-        g2dRect.drawString("Score: " + elapsedTime, 550, 100);
-        g2dRect.drawString("Lap: " + car.lap + " / " + laps, 700, 100);
+        g2dRect.drawString("Highscore: " + readScore(), 950, 100);
+        g2dRect.drawString("Score: " + elapsedTime, 1150, 100);
+        g2dRect.drawString("Lap: " + car.lap + " / " + laps, 1300, 100);
 
 //        g2dRect.drawString("Speed: " + (int) car2.speed / 4, 10, 700);
         g2dRect.drawString("Speed: " + (int) car2.speed / 4, 10, 700);
 //        g2dRect.drawString("RPM: " + car2.engine.getRPM(), 130, 700);
 //        g2dRect.drawString("Gear: " + car2.engine.getGear(), 250, 700);
         // pana aici
-        g2dRect.drawString("Highscore: " + readScore(), 350, 700);
-        g2dRect.drawString("Score: " + elapsedTime2, 550, 700);
-        g2dRect.drawString("Lap: " + car2.lap + " / " + laps, 700, 700);
+        g2dRect.drawString("Highscore: " + readScore(), 950, 700);
+        g2dRect.drawString("Score: " + elapsedTime2, 1150, 700);
+        g2dRect.drawString("Lap: " + car2.lap + " / " + laps, 1300, 700);
         if (finishedRace) {
             if (car1won)
-                g2dRect.drawString("Car 1 Won!!!" , 300, 400);
+                g2dRect.drawString("Car 1 Won!!!" , 90, 380);
             if (!car1won)
-                g2dRect.drawString("Car 2 Won!!!" , 300, 400);
+                g2dRect.drawString("Car 2 Won!!!" , 90, 380);
         }
 
 

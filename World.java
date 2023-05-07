@@ -10,14 +10,12 @@ public class World extends JFrame {
         super();
         gameObjects = new ArrayList<GamePanel>();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 800);
-        this.setBackground(Color.LIGHT_GRAY);
+        //setSize(800, 800);
         setVisible(true);
         setLocationRelativeTo(null);
         //setLayout(null);
-        //setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        GamePanel gamePanel = new GamePanel(300, 300, 20);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        GamePanel gamePanel = new GamePanel(300, 300, 0);
 
         addKeyListener(gamePanel);
         addGameObject(gamePanel);

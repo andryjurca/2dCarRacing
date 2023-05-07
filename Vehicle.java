@@ -39,7 +39,7 @@ public abstract class Vehicle {
             System.out.println("Error loading car image");
             imageLoaded = false;
         }
-        double scalingFactor = Math.min(100.0 / image.getWidth(), 100.0 / image.getHeight());
+        double scalingFactor = Math.min(80.0 / image.getWidth(), 100.0 / image.getHeight());
         scaledWidth = (int) (scalingFactor * image.getWidth());
         scaledHeight = (int) (scalingFactor * image.getHeight());
         scaledImage = image.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);

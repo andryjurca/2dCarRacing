@@ -5,10 +5,10 @@ public class Engine {
     private static final int MAX_RPM = 6000; // maximum RPM
     private static final int MAX_GEAR = 6; // maximum gear
     private static final int MIN_GEAR = 1; // minimum gear
-    private static final double MAX_SPEED = 300; // maximum speed in km/h
+    private static final double HP = 400;
+    private static final double TORQUE = 200;
+    private static final double MASS = 2000;
     private static final int ACCELERATOR = 50;
-    private static final int TORQUE = 300;
-    private static final int HP = 200;
     private static final int FRICTION = 3;
     private int rpm;
     private int gear;
@@ -42,12 +42,6 @@ public class Engine {
             restart();
         }
         EngineSound.playEngineSound(rpm);
-//        try {
-//            Thread.sleep(100);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
 
     }
     public boolean goodRpm() {
@@ -63,15 +57,19 @@ public class Engine {
     public void brake() {
         if (rpm >= 50)
             rpm -= 50;
-        speed = ((double)rpm * gear / MAX_RPM * MAX_SPEED)/2;
+        speed = getSpeed();
+
+
+        // speed = ((double)rpm * gear * TORQUE * HP * 1000) / (MAX_RPM * mass * 5252);
     }
     public void pressAccelerator() {
         accelerated = true;
         rpm += ACCELERATOR / gear;
 
         // calculate speed based on rpm and gear
-        speed = ((double)rpm * gear / MAX_RPM * MAX_SPEED)/2;
+        speed = getSpeed();
 
+        // speed = ((double)rpm * gear * TORQUE * HP * 1000) / (MAX_RPM * mass * 5252);
     }
 
     public void shiftUp() {
@@ -81,7 +79,8 @@ public class Engine {
         }
 
         // calculate speed based on rpm and gear
-        speed = ((double)rpm * gear / MAX_RPM * MAX_SPEED)/2;
+        speed = getSpeed();
+        // speed = ((double)rpm * gear * TORQUE * HP * 1000) / (MAX_RPM * mass * 5252);
     }
 
     public void shiftDown() {
@@ -91,11 +90,26 @@ public class Engine {
         }
 
         // calculate speed based on rpm and gear
-        speed = ((double)rpm * gear / MAX_RPM * MAX_SPEED)/2 ;
+        speed = getSpeed();
+        // speed = ((double)rpm * gear * TORQUE * HP * 1000) / (MAX_RPM * mass * 5252);
     }
 
     public double getSpeed() {
-        return ((double)rpm * gear / MAX_RPM * MAX_SPEED)/2;
+        if (HP>=TORQUE) {
+            if (rpm <= MAX_RPM / 2)
+                speed = ((double)rpm * gear / MAX_RPM * TORQUE)/((MASS/1500));
+            else
+                speed = ((double)rpm * gear / MAX_RPM * ((TORQUE+HP)/2))/((MASS/1500)+1);
+        }
+        else {
+            if (rpm <= MAX_RPM / 2)
+                speed = ((double)rpm * gear / MAX_RPM * ((HP+TORQUE)/2))/((MASS/1500)+1);
+            else
+                speed = ((double)rpm * gear / MAX_RPM * HP)/((MASS/1500));
+        }
+        return speed;
+        // speed = ((double)rpm * gear * TORQUE * HP * 1000) / (MAX_RPM * mass * 5252);
+        // return speed;
     }
 
     public int getRPM() {

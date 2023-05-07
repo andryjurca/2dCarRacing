@@ -143,6 +143,7 @@ public class ManualVehicle extends Vehicle {
     }
 
     public void colliding(JPanel panel) {
+        // isMoving = false;
         engine.restart();
         x -= Math.round(Math.cos(Math.toRadians(angle)) * (engine.getSpeed()/10));
         y -= Math.round(Math.sin(Math.toRadians(angle)) * (engine.getSpeed()/10));
